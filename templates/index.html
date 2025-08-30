@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ram Gupta | AI/ML Enthusiast Portfolio</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- GSAP Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/ScrollTrigger.min.js"></script>
+
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.151.3/three.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="static/css/custom.css">     <!--11-->
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        accent: {
+                            'neon': '#39FF14',
+                            'purple': '#7B4DFF',
+                            'pink': '#FF00FF',
+                            'teal': '#00F5FF',
+                        },
+                        dark: {
+                            'bg': '#0F1218',
+                            'card': '#1A1F2B',
+                            'border': '#2A2F3B',
+                        }
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-dark-bg text-white font-sans antialiased">
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="fixed inset-0 bg-dark-bg z-50 flex items-center justify-center">
+        <div class="flex flex-col items-center">
+            <div class="w-16 h-16 border-4 border-accent-neon border-t-transparent rounded-full animate-spin mb-4">
+            </div>
+            <div class="text-2xl font-bold text-accent-neon tracking-widest">LOADING</div>
+            <div class="text-sm text-gray-400 mt-2">Initializing Neural Networks...</div>
+        </div>
+    </div>
+
+    <!-- Audio Controls -->
+    <div id="audio-controls"
+        class="fixed bottom-4 right-4 z-40 bg-dark-card p-3 rounded-full shadow-lg shadow-accent-purple/20 flex items-center space-x-2">
+        <button id="play-pause" class="text-accent-neon hover:text-accent-purple transition-colors">
+            <i class="fas fa-play"></i>
+        </button>
+        <div class="hidden md:block">
+            <input type="range" id="volume-slider" min="0" max="100" value="50"
+                class="w-20 accent-accent-neon bg-dark-border h-1 rounded-lg appearance-none cursor-pointer">
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-30 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-4 py-4 md:py-6 flex justify-between items-center">
+            <a href="#hero" class="text-2xl font-bold text-accent-neon">
+                <span class="tracking-wider">[AI/ML]</span>
+                <span class="text-white">Enthusiast</span>
+            </a>
+
+            <!-- Mobile Nav Toggle -->
+            <button id="mobile-nav-toggle" class="md:hidden text-white focus:outline-none">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+
+            <!-- Desktop Nav -->
+            <ul class="hidden md:flex space-x-8 text-white">
+                <li><a href="#about" class="nav-link hover:text-accent-neon transition-colors">About</a></li>
+                <li><a href="#skills" class="nav-link hover:text-accent-neon transition-colors">Skills</a></li>
+                <li><a href="#projects" class="nav-link hover:text-accent-neon transition-colors">Projects</a></li>
+                <li><a href="#experience" class="nav-link hover:text-accent-neon transition-colors">Experience</a></li>
+                <li><a href="#contact" class="nav-link hover:text-accent-neon transition-colors">Contact</a></li>
+            </ul>
+        </div>
+
+        <!-- Mobile Nav Menu -->
+        <div id="mobile-nav"
+            class="md:hidden bg-dark-card fixed inset-0 z-40 transform translate-x-full transition-transform duration-300 ease-in-out">
+            <div class="p-4 flex justify-between items-center">
+                <div class="text-2xl font-bold text-accent-neon">
+                    <span class="tracking-wider">[AI/ML]</span>
+                    <span class="text-white">Enthusiast</span>
+                </div>
+                <button id="close-mobile-nav" class="text-white">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <ul class="flex flex-col items-center space-y-8 text-white text-2xl pt-12">
+                <li><a href="#about" class="mobile-nav-link">About</a></li>
+                <li><a href="#skills" class="mobile-nav-link">Skills</a></li>
+                <li><a href="#projects" class="mobile-nav-link">Projects</a></li>
+                <li><a href="#experience" class="mobile-nav-link">Experience</a></li>
+                <li><a href="#contact" class="mobile-nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section with 3D Background -->
+    <section id="hero" class="relative min-h-screen flex items-center">
+        <!-- 3D Canvas as Background -->
+        <canvas id="hero-canvas" class="absolute inset-0 w-full h-full -z-10"></canvas>
+
+        <div class="container mx-auto px-4 z-10">
+            <div class="max-w-4xl mx-auto text-center md:text-left md:mx-0">
+                <div class="inline-block bg-dark-bg/40 backdrop-blur-sm p-2 rounded-lg mb-4">
+                    <span class="text-accent-neon font-mono text-sm md:text-base tracking-wider">// FINAL YEAR
+                        STUDENT</span>
+                </div>
+
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
+                    <span class="text-white">Hello, I'm</span>
+                    <div class="dynamic-text text-accent-purple mt-2">
+                        <span id="name-placeholder" class="particle-text">Ram Narayan Gupta</span>
+                    </div>
+                </h1>
+
+                <p class="text-gray-300 text-lg md:text-xl mb-8 max-w-2xl">
+                    <span id="tagline-placeholder">Passionate CSE student skilled in AI, ML, and data-driven solutions,
+                        creating innovative projects that turn complex problems into real-world applications.</span>
+                </p>
+
+                <div
+                    class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 justify-center md:justify-start">
+                    <a href="#projects" class="btn-primary">
+                        View My Work
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                    <a href="#contact" class="btn-secondary">
+                        Contact Me
+                        <i class="fas fa-paper-plane ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-center z-10">
+            <p class="text-gray-400 text-sm mb-2">Scroll Down</p>
+            <div class="animate-bounce">
+                <i class="fas fa-chevron-down text-accent-neon"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 relative">
+        <div class="absolute inset-0 z-0 opacity-20">
+            <div class="neural-network-pattern"></div>
+        </div>
+
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="section-heading">
+                <span class="section-subtitle">About Me</span>
+                <h2 class="section-title particle-text">Engineering Intelligence, One Model at a Time</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center mt-16">
+                <div class="about-image-container relative">
+                    <div class="h-80 md:h-96 w-full rounded-lg overflow-hidden relative">
+                        <!-- Profile Image -->
+                        <img src="static/assets/images/profile.png" alt="Ram Gupta"
+                            class="w-full h-full object-contain bg-dark-card">               
+                        <div class="absolute inset-0 border-2 border-accent-purple rounded-lg"></div>
+                    </div>
+                    <div
+                        class="absolute -bottom-6 -right-6 w-24 h-24 bg-dark-card p-4 rounded-lg flex items-center justify-center">
+                        <div class="w-full h-full relative">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <svg class="w-full h-full" viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="40" stroke="currentColor" stroke-width="3" fill="none"
+                                        class="text-accent-purple"></circle>
+                                    <circle cx="50" cy="50" r="30" stroke="currentColor" stroke-width="2" fill="none"
+                                        class="text-accent-teal"></circle>
+                                    <circle cx="50" cy="50" r="20" stroke="currentColor" stroke-width="1" fill="none"
+                                        class="text-accent-neon"></circle>
+                                </svg>
+                            </div>
+                            <!-- REPLACE_WITH_YOUR_YEARS_OF_EXPERIENCE -->
+                            <div id="experience-years-placeholder"
+                                class="absolute inset-0 flex items-center justify-center text-xl font-bold text-white">
+                                0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-bold mb-4 text-accent-neon">Transforming Ideas into Intelligent Solutions
+                    </h3>
+
+                    <!-- REPLACE_WITH_YOUR_BIO -->
+                    <div id="bio-placeholder" class="space-y-4">
+                        <p class="text-gray-300">
+                            I’m Ram Narayan Gupta, a forward-thinking Computer Science and Engineering student at Raja
+                            Balwant Singh Engineering Technical Campus, Agra, with a deep passion for Artificial
+                            Intelligence, Machine Learning, and Data Science. My journey in technology is driven by
+                            curiosity and the desire to transform ideas into impactful, real-world solutions.
+                        </p>
+
+                        <!-- <p class="text-gray-300">
+                            I specialize in building intelligent systems—ranging from predictive analytics models to
+                            deep learning-based detection systems—and have hands-on experience in both academic and
+                            self-initiated projects. Notable works include Wind Speed Prediction using 6 years of NOAA
+                            data, AI-Based Space Object Detection, Smart Waste Classification, and Traffic Sign
+                            Recognition for Autonomous Cars. These projects allowed me to apply Python, React.js,
+                            Streamlit, Scikit-learn, LightGBM, LSTM, and other cutting-edge tools to solve complex
+                            challenges efficiently.
+                        </p> -->
+
+                        <p class="text-gray-300">
+                            My approach combines analytical thinking, clean coding practices, and a problem-solving
+                            mindset. I believe that technology is most powerful when it bridges the gap between
+                            innovation and usability, and I strive to build solutions that not only work—but work smart.
+                        </p>
+
+                        <p class="text-gray-300">
+                            Beyond coding, I’m an enthusiastic learner who enjoys exploring emerging tech trends,
+                            collaborating on meaningful projects, and sharing knowledge with the community. My vision is
+                            to contribute to AI-driven innovations that make a measurable difference in people’s lives
+                            and industries worldwide.
+                        </p>
+                    </div>
+
+
+                    <div class="grid grid-cols-2 gap-4 mt-6">
+                        <!-- REPLACE_WITH_YOUR_DETAILS -->
+                        <div class="about-detail">
+                            <i class="fas fa-user text-accent-purple"></i>
+                            <div>
+                                <h4>Name</h4>
+                                <p id="name-detail-placeholder">Ram Narayan Gupta</p>
+                            </div>
+                        </div>
+
+                        <div class="about-detail">
+                            <i class="fas fa-envelope text-accent-teal"></i>
+                            <div>
+                                <h4>Email</h4>
+                                <p id="email-placeholder">ramnrngupta@gmail.com</p>
+                            </div>
+                        </div>
+
+                        <div class="about-detail">
+                            <i class="fas fa-map-marker-alt text-accent-pink"></i>
+                            <div>
+                                <h4>Location</h4>
+                                <p id="location-placeholder">Agra, India</p>
+                            </div>
+                        </div>
+
+                        <div class="about-detail">
+                            <i class="fas fa-graduation-cap text-accent-neon"></i>
+                            <div>
+                                <h4>Degree</h4>
+                                <p id="degree-placeholder">B.Tech in Computer Science</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 flex">
+                        <a href="static/assets/resume/Ram-Narayan-Gupta-CV.pdf" id="resume-link-placeholder" class="btn-primary">
+                            Download CV
+                            <i class="fas fa-download ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 bg-dark-card relative overflow-hidden">
+        <div class="absolute inset-0 z-0 opacity-5">
+            <div class="circuit-board-pattern"></div>
+        </div>
+
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="section-heading">
+                <span class="section-subtitle">My Skills</span>
+                <h2 class="section-title particle-text">Technical Capabilities</h2>
+            </div>
+
+            <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-16">
+                <div>
+                    <h3 class="text-2xl font-bold mb-8 text-white">Technical Expertise</h3>
+                    <div id="technical-skills-placeholder" class="space-y-6">
+
+                        <div class="skill-bar">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-semibold">Machine Learning</span>
+                                <span class="text-green-400">65%</span>
+                            </div>
+                            <div class="bg-gray-700 h-2 rounded-full overflow-hidden">
+                                <div class="bg-green-400 h-full rounded-full" style="width: 65%"></div>
+                            </div>
+                        </div>
+
+                        <div class="skill-bar">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-semibold">Artificial Intelligence</span>
+                                <span class="text-purple-400">20%</span>
+                            </div>
+                            <div class="bg-gray-700 h-2 rounded-full overflow-hidden">
+                                <div class="bg-purple-400 h-full rounded-full" style="width: 20%"></div>
+                            </div>
+                        </div>
+
+                        <div class="skill-bar">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-semibold">Deep Learning</span>
+                                <span class="text-orange-400">20%</span>
+                            </div>
+                            <div class="bg-gray-700 h-2 rounded-full overflow-hidden">
+                                <div class="bg-orange-400 h-full rounded-full" style="width: 20%"></div>
+                            </div>
+                        </div>
+
+                        <div class="skill-bar">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-semibold">Data Science</span>
+                                <span class="text-blue-400">80%</span>
+                            </div>
+                            <div class="bg-gray-700 h-2 rounded-full overflow-hidden">
+                                <div class="bg-blue-400 h-full rounded-full" style="width: 80%"></div>
+                            </div>
+                        </div>
+
+                        <div class="skill-bar">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-semibold">Model Deployment</span>
+                                <span class="text-cyan-400">70%</span>
+                            </div>
+                            <div class="bg-gray-700 h-2 rounded-full overflow-hidden">
+                                <div class="bg-cyan-400 h-full rounded-full" style="width: 70%"></div>
+                            </div>
+                        </div>
+
+                        <div class="skill-bar">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-semibold">Python Programming</span>
+                                <span class="text-green-400">90%</span>
+                            </div>
+                            <div class="bg-gray-700 h-2 rounded-full overflow-hidden">
+                                <div class="bg-green-400 h-full rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+
+                        <div class="skill-bar">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-semibold">React.js Development</span>
+                                <span class="text-indigo-400">70%</span>
+                            </div>
+                            <div class="bg-gray-700 h-2 rounded-full overflow-hidden">
+                                <div class="bg-indigo-400 h-full rounded-full" style="width: 70%"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div>
+                    <h3 class="text-2xl font-bold mb-6 text-white">Tools & Technologies</h3>
+
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="flex-1">
+                            <h4 class="text-xl font-semibold mb-3 text-accent-neon">Programming</h4>
+                            <div class="tech-card">
+                                <i class="fab fa-python text-accent-neon"></i>
+                                <span>Python</span>
+                            </div>
+                            <div class="tech-card">
+                                <i class="fab fa-java text-accent-pink"></i>
+                                <span>Java</span>
+                            </div>
+                            <div class="tech-card">
+                                <i class="fas fa-database text-accent-purple"></i>
+                                <span>SQL</span>
+                            </div>
+                            <div class="tech-card">
+                                <i class="fab fa-git-alt text-accent-pink"></i>
+                                <span>Git</span>
+                            </div>
+                            <div class="tech-card">
+                                <i class="fab fa-github text-accent-purple"></i>
+                                <span>GitHub</span>
+                            </div>
+                        </div>
+
+                        <div class="flex-1">
+                            <h4 class="text-xl font-semibold mb-3 text-accent-purple">AI & ML</h4>
+                            <div class="tech-card">
+                                <i class="fas fa-brain text-accent-pink"></i>
+                                <span>Scikit-learn</span>
+                            </div>
+                            <div class="tech-card">
+                                <i class="fas fa-chart-line text-accent-yellow"></i>
+                                <span>Pandas & NumPy</span>
+                            </div>
+                            <div class="tech-card">
+                                <i class="fas fa-project-diagram text-accent-purple"></i>
+                                <span>Streamlit</span>
+                            </div>
+                            <div class="tech-card">
+                                <i class="fas fa-laptop-code text-accent-green"></i>
+                                <span>FastAPI</span>
+                            </div>
+                        </div>
+
+                        <div class="flex-1">
+                            <h4 class="text-xl font-semibold mb-3 text-accent-teal">Data Science</h4>
+                            <div class="tech-card">
+                                <i class="fas fa-table text-accent-pink"></i>
+                                <span>Pandas & NumPy</span>
+                            </div>
+                            <div class="tech-card">
+                                <i class="fas fa-project-diagram text-accent-purple"></i>
+                                <span>Scikit-learn</span>
+                            </div>
+                            <div class="tech-card">
+                                <i class="fas fa-chart-area text-accent-pink"></i>
+                                <span>Matplotlib & Seaborn</span>
+                            </div>
+                        </div>
+
+                        <div class="flex-1">
+                            <h4 class="text-xl font-semibold mb-3 text-accent-pink">Cloud & DevOps</h4>
+                            <div class="tech-card">
+                                <i class="fab fa-github text-accent-neon"></i>
+                                <span>GitHub Actions</span>
+                            </div>
+                            <div class="tech-card">
+                                <i class="fas fa-bolt text-accent-teal"></i>
+                                <span>FastAPI+Uvicorn</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skill Tree Visualization -->
+            <div class="mt-20">
+                <h3 class="text-2xl font-bold mb-8 text-white">AI/ML Skill Tree</h3>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div
+                        class="lg:col-span-2 bg-dark-bg rounded-lg overflow-hidden border border-dark-border h-[500px]">
+                        <div id="skill-tree-container" class="w-full h-full"></div>
+                    </div>
+                    <div class="bg-dark-bg rounded-lg p-6 border border-dark-border">
+                        <h4 class="text-xl font-semibold mb-4 text-accent-purple">Skill Details</h4>
+                        <div id="skill-details" class="transition-all duration-300">
+                            <p class="text-gray-400">Hover and click on the skill nodes to see details.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section with 3D Models -->
+    <section id="projects" class="py-20 relative">
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="section-heading">
+                <span class="section-subtitle">My Work</span>
+                <h2 class="section-title particle-text">Featured Projects</h2>
+            </div>
+
+            <!-- Ram's Featured Projects -->
+            <div id="projects-placeholder" class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                <!-- Wind Speed Prediction -->
+                <div class="project-card">
+                    <div class="project-thumb h-56 bg-dark-card">
+                        <div class="project-3d-container" data-project="wind-speed"></div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Wind Speed Prediction</h3>
+                        <p>Developed a predictive model using 6 years of NOAA weather data to accurately
+                            forecast wind speeds,
+                            enabling better decision-making for renewable energy planning.</p>
+                        <div class="project-tech">
+                            <span>Python</span>
+                            <span>LightGBM</span>
+                            <span>LSTM</span>
+                            <span>Pandas</span>
+                            <span>Streamlit</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/ram-narayan-gupta-02/Wind-Speed-Prediction-System.git"
+                                target="_blank" class="project-link">
+                                <i class="fab fa-github"></i>
+                                <span>Source Code</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Titanic Survival Prediction -->
+                <div class="project-card">
+                    <div class="project-thumb h-56 bg-dark-card">
+                        <div class="project-3d-container" data-project="titanic"></div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Titanic Survival Prediction</h3>
+                        <p>Built a machine learning classifier to predict passenger survival probabilities based
+                            on demographics,
+                            ticket class, and travel details from the Titanic dataset.</p>
+                        <div class="project-tech">
+                            <span>Python</span>
+                            <span>Scikit-learn</span>
+                            <span>Pandas</span>
+                            <span>NumPy</span>
+                            <span>Matplotlib</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/ram-narayan-gupta-02/Titanic-Survival-System.git"
+                                target="_blank" class="project-link">
+                                <i class="fab fa-github"></i>
+                                <span>Source Code</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Movie Recommendation System -->
+                <div class="project-card">
+                    <div class="project-thumb h-56 bg-dark-card">
+                        <div class="project-3d-container" data-project="movie-recommendation"></div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Movie Recommendation System</h3>
+                        <p>Created a content-based movie recommendation engine using cosine similarity to
+                            suggest relevant movies
+                            based on user preferences and movie metadata.</p>
+                        <div class="project-tech">
+                            <span>Python</span>
+                            <span>Pandas</span>
+                            <span>NumPy</span>
+                            <span>Scikit-learn</span>
+                            <span>Streamlit</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/ram-narayan-gupta-02/Recommender-System.git" target="_blank"
+                                class="project-link">
+                                <i class="fab fa-github"></i>
+                                <span>Source Code</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="py-20 bg-dark-card relative">
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="section-heading">
+                <span class="section-subtitle">My Journey</span>
+                <h2 class="section-title particle-text">Professional Experience</h2>
+            </div>
+
+            <!-- Education & Experience Section -->
+            <div id="experience-placeholder" class="mt-16">
+                <!-- Education Section -->
+                <h3 class="text-2xl font-bold mb-8 text-white">Education</h3>
+                <div class="timeline mb-16">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date">
+                            <span>2022 - 2026</span>
+                        </div>
+                        <div class="timeline-content">
+                            <h3>B.Tech in Computer Science & Engineering</h3>
+                            <h4>Raja Balwant Singh Engineering Technical Campus, Agra</h4>
+                            <p>Pursuing a Bachelor's degree in Computer Science & Engineering with a good focus on
+                                Artificial Intelligence, Machine Learning, and Data Science, blending practical projects
+                                with theoretical foundations.</p>
+                            <ul class="timeline-highlights">
+                                <li>Worked on major AI/ML projects including Wind Speed Prediction, AI-Based Space
+                                    Object Detection, Movies Recommendation, and Titanic Survival Prediction</li>
+                                <li>Gained expertise in Python, LightGBM, LSTM, Scikit-learn, and Computer Vision</li>
+                                <li>Actively participated in hackathons, technical competitions, and collaborative
+                                    research initiatives</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Experience Section -->
+                <h3 class="text-2xl font-bold mb-8 text-white">Professional Experience</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-date">
+                            <span>June 2025 - July 2025</span>
+                        </div>
+                        <div class="timeline-content">
+                            <h3>AI/ML Intern</h3>
+                            <h4>DRDO, Ministry of Defence, Govt. of India</h4>
+                            <p>Developed AI and machine learning solutions for real-world applications, wind
+                                speed prediction.</p>
+                            <ul class="timeline-highlights">
+                                <li>Built predictive models for credit scoring using Python and scikit-learn</li>
+                                <li>Developed data preprocessing pipelines for structured financial data</li>
+                                <li>Contributed to the implementation of model deployment workflows</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 relative">
+        <div class="absolute inset-0 z-0 opacity-10">
+            <div class="data-flow-pattern"></div>
+        </div>
+
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="section-heading">
+                <span class="section-subtitle">Get In Touch</span>
+                <h2 class="section-title particle-text">Contact Me</h2>
+            </div>
+
+            <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-16">
+                <div>
+                    <h3 class="text-2xl font-bold mb-6 text-white">Let's Connect</h3>
+                    <p class="text-gray-300 mb-8">Have a project in mind or want to discuss AI solutions? Feel free to
+                        reach out and I'll get back to you as soon as possible.</p>
+
+                    <!-- REPLACE_WITH_YOUR_CONTACT_INFO -->
+                    <div id="contact-info-placeholder" class="space-y-6">
+                        <div class="contact-item">
+                            <i class="fas fa-envelope text-accent-neon"></i>
+                            <div>
+                                <h4>Email</h4>
+                                <p>ramnrngupta@gmail.com</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt text-accent-purple"></i>
+                            <div>
+                                <h4>Location</h4>
+                                <p>Agra, India</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <i class="fas fa-phone text-accent-pink"></i>
+                            <div>
+                                <h4>Phone</h4>
+                                <p>Contact via email</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-10">
+                        <h4 class="text-xl font-semibold mb-4 text-white">Connect With Me</h4>
+
+                        <!-- Social Links -->
+                        <div id="social-links-placeholder" class="flex space-x-4">
+                            <a href="https://github.com/ram-narayan-gupta-02" target="_blank" class="social-icon">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/in/ram-narayan-gupta" target="_blank" class="social-icon">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="https://instagram.com/_ramnrngupta" target="_blank" class="social-icon">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="bg-dark-card rounded-lg p-8 shadow-xl shadow-accent-purple/10">
+                        <h3 class="text-2xl font-bold mb-6 text-white">Send Message</h3>
+
+                        <form id="contact-form" class="space-y-6">
+                            <div class="form-group">
+                                <label for="name">Your Name</label>
+                                <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Your Email</label>
+                                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <input type="text" id="subject" name="subject" placeholder="Enter the subject" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" name="message" rows="5" placeholder="Enter your message"
+                                    required></textarea>
+                            </div>
+
+                            <div id="form-status" class="hidden"></div>
+
+                            <button type="submit" id="submit-btn" class="btn-primary w-full">
+                                Send Message
+                                <i class="fas fa-paper-plane ml-2"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const contactForm = document.getElementById('contact-form');
+                            const formStatus = document.getElementById('form-status');
+                            const submitBtn = document.getElementById('submit-btn');
+
+                            if (contactForm) {
+                                contactForm.addEventListener('submit', async function (e) {
+                                    e.preventDefault();
+
+                                    // Disable button and show loading
+                                    submitBtn.disabled = true;
+                                    submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> Sending...';
+                                    formStatus.classList.remove("hidden");
+                                    formStatus.textContent = "";
+
+                                    // Collect form data
+                                    const formData = {
+                                        name: document.getElementById('name').value.trim(),
+                                        email: document.getElementById('email').value.trim(),
+                                        subject: document.getElementById('subject').value.trim(),
+                                        message: document.getElementById('message').value.trim()
+                                    };
+
+                                    try {
+                                        // Send request to Flask backend
+                                        const response = await fetch("/api/send-email", {
+                                            method: "POST",
+                                            headers: { "Content-Type": "application/json" },
+                                            body: JSON.stringify(formData)
+                                        });
+
+                                        const data = await response.json();
+
+                                        if (response.ok) {
+                                            formStatus.textContent = "✅ Message sent successfully!";
+                                            formStatus.classList.add("text-green-500");
+                                            contactForm.reset();
+                                        } else {
+                                            formStatus.textContent = data.error || "❌ Failed to send message.";
+                                            formStatus.classList.add("text-red-500");
+                                        }
+                                    } catch (err) {
+                                        formStatus.textContent = "⚠️ Network error: " + err.message;
+                                        formStatus.classList.add("text-red-500");
+                                    } finally {
+                                        submitBtn.disabled = false;
+                                        submitBtn.innerHTML = 'Send Message <i class="fas fa-paper-plane ml-2"></i>';
+                                    }
+                                });
+                            }
+                        });
+            </script>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark-bg py-8 border-t border-dark-border">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <a href="#hero" class="text-xl font-bold text-accent-neon">
+                        <span class="tracking-wider">[AI/ML]</span>
+                        <span class="text-white">Enthusiast</span>
+                    </a>
+                </div>
+
+                <div class="text-center md:text-left mb-4 md:mb-0">
+                    <p class="text-gray-400">
+                        <!-- REPLACE_WITH_YOUR_NAME -->
+                        &copy; <span id="year"></span> <span id="footer-name-placeholder">Ram Narayan Gupta</span>. All
+                        rights reserved.
+                    </p>
+                </div>
+
+                <div class="flex space-x-4">
+                    <a href="https://github.com/ram-narayan-gupta-02" target="_blank"
+                        class="text-gray-400 hover:text-accent-neon transition-colors">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/ram-narayan-gupta" target="_blank"
+                        class="text-gray-400 hover:text-accent-neon transition-colors">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://instagram.com/_ramnrngupta" target="_blank"
+                        class="text-gray-400 hover:text-accent-neon transition-colors">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Theme Switcher -->
+    <div id="theme-toggle-container" class="fixed top-20 right-6 z-40"></div>
+
+    <!-- Chatbot Assistant -->
+    <div id="chatbot-toggle-container" class="fixed bottom-6 right-6 z-50"></div>
+
+    <!-- JavaScript Files -->
+    <script src="static/js/main.js"></script>               
+    <script src="static/js/three-scene.js"></script>               
+    <script src="static/js/audio-controller.js"></script>           
+    <script src="static/js/animations.js"></script>               
+
+    <!-- Component Scripts -->
+    <script src="static/js/components/theme-switcher.js"></script>             
+    <script src="static/js/components/cursor-effects.js"></script>             
+    <script src="static/js/components/chatbot-assistant.js"></script>             
+    <script src="static/js/components/enhanced-text.js"></script>             
+    <script src="static/js/components/skill-tree.js"></script>             
+    <script>
+        // Disable right-click
+        document.addEventListener("contextmenu", function (e) {
+            e.preventDefault();
+        });
+
+        // Disable Ctrl+U, Ctrl+Shift+I, Ctrl+Shift+C, and F12
+        document.addEventListener("keydown", function (e) {
+            if (
+                (e.ctrlKey && e.key.toLowerCase() === "u") || // Ctrl+U
+                (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "i") || // Ctrl+Shift+I
+                (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "c") || // Ctrl+Shift+C
+                e.key === "F12" // F12
+            ) {
+                e.preventDefault();
+            }
+        });
+
+    </script>
+</body>
+
+</html>
